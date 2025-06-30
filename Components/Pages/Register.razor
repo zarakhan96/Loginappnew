@@ -1,0 +1,197 @@
+﻿@page "/register"
+@rendermode InteractiveServer
+@using Loginapp.Models
+@inject NavigationManager Navigation
+@inject Loginapp.Data.AppDbContext DbContext
+@using Microsoft.EntityFrameworkCore
+
+<EditForm Model="@newUser" OnValidSubmit="HandleValidSubmit" FormName="UserRegistrationForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="login-wrapper d-flex justify-content-center align-items-center">
+        <div class="login-box text-center p-4">
+            <h3 class="mb-4 text-white">Register</h3>
+
+            @if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                <div class="alert alert-danger py-1">@ErrorMessage</div>
+            }
+
+            <!-- New Fields: First Name, Last Name -->
+            <div class="form-group mb-3">
+                <InputText class="form-control" Value="@newUser.FirstName" ValueChanged="@((val) => newUser.FirstName = val)" ValueExpression="@(() => newUser.FirstName)" placeholder="First Name" />
+                <ValidationMessage For="@(() => newUser.FirstName)" />
+            </div>
+
+            <div class="form-group mb-3">
+                <InputText class="form-control" Value="@newUser.LastName" ValueChanged="@((val) => newUser.LastName = val)" ValueExpression="@(() => newUser.LastName)" placeholder="Last Name" />
+                <ValidationMessage For="@(() => newUser.LastName)" />
+            </div>
+
+            <!-- Existing Fields -->
+            <div class="form-group mb-3">
+                <InputText class="form-control" Value="@newUser.Username" ValueChanged="@((val) => newUser.Username = val)" ValueExpression="@(() => newUser.Username)" placeholder="Username" />
+                <ValidationMessage For="@(() => newUser.Username)" />
+            </div>
+
+            <div class="form-group mb-3">
+                <InputText class="form-control" Value="@newUser.Email" ValueChanged="@((val) => newUser.Email = val)" ValueExpression="@(() => newUser.Email)" placeholder="Email" />
+                <ValidationMessage For="@(() => newUser.Email)" />
+            </div>
+
+            <div class="form-group mb-3">
+                <InputText class="form-control" type="password" Value="@newUser.Password" ValueChanged="@((val) => newUser.Password = val)" ValueExpression="@(() => newUser.Password)" placeholder="Password" />
+                <ValidationMessage For="@(() => newUser.Password)" />
+            </div>
+
+            <div class="form-group mb-3">
+                <InputText class="form-control" type="password" Value="@newUser.ConfirmPassword" ValueChanged="@((val) => newUser.ConfirmPassword = val)" ValueExpression="@(() => newUser.ConfirmPassword)" placeholder="Confirm Password" />
+                <ValidationMessage For="@(() => newUser.ConfirmPassword)" />
+            </div>
+
+            <div class="form-group mb-3">
+                <InputText class="form-control" Value="@newUser.Designation" ValueChanged="@((val) => newUser.Designation = val)" ValueExpression="@(() => newUser.Designation)" placeholder="Designation" />
+                <ValidationMessage For="@(() => newUser.Designation)" />
+            </div>
+
+            <div class="form-group mb-3">
+                <InputText class="form-control" Value="@newUser.ContactNumber" ValueChanged="@((val) => newUser.ContactNumber = val)" ValueExpression="@(() => newUser.ContactNumber)" placeholder="Contact Number" />
+                <ValidationMessage For="@(() => newUser.ContactNumber)" />
+            </div>
+
+            <div class="form-group mb-3">
+                <InputText class="form-control" Value="@newUser.Address" ValueChanged="@((val) => newUser.Address = val)" ValueExpression="@(() => newUser.Address)" placeholder="Address" />
+                <ValidationMessage For="@(() => newUser.Address)" />
+            </div>
+
+            <!-- New Fields: Postal Code, Permanent Address -->
+            <div class="form-group mb-3">
+                <InputText class="form-control" Value="@newUser.PostalCode" ValueChanged="@((val) => newUser.PostalCode = val)" ValueExpression="@(() => newUser.PostalCode)" placeholder="Postal Code" />
+                <ValidationMessage For="@(() => newUser.PostalCode)" />
+            </div>
+
+            <div class="form-group mb-3">
+                <InputText class="form-control" Value="@newUser.PermanentAddress" ValueChanged="@((val) => newUser.PermanentAddress = val)" ValueExpression="@(() => newUser.PermanentAddress)" placeholder="Permanent Address" />
+                <ValidationMessage For="@(() => newUser.PermanentAddress)" />
+            </div>
+
+            <button type="submit" class="btn btn-light w-100 mb-3">Register</button>
+
+            <p class="text-white">
+                Already have an account? <a href="/login" class="text-white">Login</a>
+            </p>
+        </div>
+    </div>
+</EditForm>
+
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .login-wrapper {
+        height: 100vh;
+        background: url("images/FFCNIGHT.jpeg") no-repeat center center fixed;
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: 700px;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.55);
+        border-radius: 15px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+        color: white;
+    }
+
+    .form-control {
+        background-color: rgba(0, 0, 0, 0.7);
+        border: 2px solid transparent;
+        border-radius: 8px;
+        padding: 8px 12px;
+        margin-bottom: 10px;
+        color: white;
+        transition: all 0.3s ease;
+        width: 100%;
+        font-size: 13px;
+        height: 36px;
+    }
+
+        .form-control::placeholder {
+            color: #cccccc;
+            font-size: 13px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #00ffff;
+            background-color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 6px #00ffff, 0 0 10px #00ffff88;
+            color: white;
+        }
+
+    .btn-register {
+        width: 100%;
+        height: 38px;
+        background-color: #00ffff;
+        color: black;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 8px;
+        font-size: 14px;
+    }
+
+        .btn-register:hover {
+            background-color: #00cccc;
+        }
+
+    .validation-message {
+        color: #ffaaaa;
+        font-size: 0.8rem;
+        margin-top: -8px;
+        margin-bottom: 10px;
+    }
+</style>
+
+@code {
+    private User newUser = new();
+    private string ErrorMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        ErrorMessage = "";
+
+        if (newUser.Password != newUser.ConfirmPassword)
+        {
+            ErrorMessage = "Passwords do not match.";
+            return;
+        }
+
+        var exists = await DbContext.Users.AnyAsync(u => u.Username == newUser.Username);
+        if (exists)
+        {
+            ErrorMessage = "Username already exists.";
+            return;
+        }
+
+        DbContext.Users.Add(newUser);
+        await DbContext.SaveChangesAsync();
+
+        Navigation.NavigateTo("/login");
+    }
+}
